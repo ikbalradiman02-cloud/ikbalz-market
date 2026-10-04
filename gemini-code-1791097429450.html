@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>IKBALZ MARKET - Marketplace Akun Game & Rekber Resmi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Firebase SDK (v9 Compat) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+        * { font-family: 'Plus Jakarta Sans', sans-serif; box-sizing: border-box; }
+        body { background-color: #f8fafc; color: #0f172a; overflow-x: hidden; width: 100vw; margin: 0; padding: 0; }
+        .white-card { background: #ffffff; border: 1px solid #e2e8f0; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); }
+        .white-nav { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-bottom: 1px solid #e2e8f0; }
+        .btn-blue { background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 min-h-screen flex flex-col justify-between overflow-x-hidden">
+
+    <!-- HEADER / NAV -->
+    <header class="sticky top-0 z-40 white-nav px-4 py-3">
+        <div class="max-w-md mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <div class="w-8 h-8 rounded-lg bg-blue-600 flex items-center justify-center font-bold text-white shadow-md shadow-blue-500/30">
+                    <i class="fas fa-shield-halved text-sm"></i>
+                </div>
+                <div>
+                    <h1 class="font-extrabold text-sm tracking-wide text-slate-900 leading-tight">IKBALZ <span class="text-blue-600">MARKET</span></h1>
+                    <p class="text-[10px] text-slate-500 font-medium">Dev: <span class="text-blue-600 font-semibold">IKBALZ</span></p>
+                </div>
+            </div>
+
+            <div id="nav-dev-container">
+                <button onclick="openLoginModal()" class="px-3 py-1.5 rounded-lg bg-blue-50 border border-blue-200 text-blue-600 text-xs font-semibold flex items-center space-x-1.5 active:scale-95 transition hover:bg-blue-100">
+                    <i class="fas fa-user-gear"></i>
+                    <span>Dev Login</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="max-w-md mx-auto w-full px-3 py-4 space-y-4 flex-1">
+
+        <!-- DEVELOPER BANNER -->
+        <div id="dev-active-banner" class="hidden white-card border-blue-200 bg-blue-50/60 p-3 rounded-2xl">
+            <div class="flex items-center justify-between mb-2">
+                <div class="flex items-center space-x-2">
+                    <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span class="text-xs font-bold text-emerald-700">Mode Developer Online</span>
+                </div>
+                <button onclick="logoutDev()" class="text-[11px] text-red-600 bg-red-50 border border-red-200 px-2 py-0.5 rounded-lg font-medium hover:bg-red-100">
+                    <i class="fas fa-sign-out-alt mr-1"></i>Keluar
+                </button>
+            </div>
+            <p class="text-[11px] text-slate-600 mb-2.5">Postingan akun yang diunggah akan langsung muncul di HP pengunjung secara realtime.</p>
+            <button onclick="openUploadModal()" class="w-full py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl flex items-center justify-center space-x-2 shadow-md shadow-blue-500/20">
+                <i class="fas fa-plus-circle"></i>
+                <span>Upload Akun Baru (Cloud Sync)</span>
+            </button>
+        </div>
+
+        <!-- HERO BANNER -->
+        <div class="white-card rounded-2xl p-4 border-slate-200 relative overflow-hidden bg-gradient-to-br from-white to-blue-50/40">
+            <span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-blue-100 text-blue-700 border border-blue-200 inline-block mb-2">
+                ⚡ Marketplace Akun Realtime
+            </span>
+            <h2 class="text-xl font-extrabold text-slate-900 leading-snug">
+                Beli Akun Game <span class="text-blue-600">Aman & Terpercaya</span>
+            </h2>
+            <p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                Garansi Anti-HB 100%. Dilayani langsung oleh Developer & Admin Rekber Resmi: <strong class="text-slate-800">IKBALZ</strong>.
+            </p>
+
+            <div class="grid grid-cols-2 gap-2 mt-4">
+                <a href="https://wa.me/62882020435168?text=Halo%20Admin%20IKBALZ,%20saya%20mau%20tanya%20stok%20akun" target="_blank" class="btn-blue text-white py-2.5 rounded-xl text-xs font-bold flex items-center justify-center space-x-2">
+                    <i class="fab fa-whatsapp text-sm"></i>
+                    <span>Hubungi WA</span>
+                </a>
+                <button onclick="scrollToRekber()" class="bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 py-2.5 rounded-xl text-xs font-bold flex items-center justify-center space-x-2">
+                    <i class="fas fa-calculator text-blue-600"></i>
+                    <span>Biaya Rekber</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- FILTER GAME -->
+        <div class="space-y-2">
+            <div class="flex justify-between items-center px-1">
+                <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider">Kategori Game</h3>
+                <span id="total-count-badge" class="text-[10px] text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200 font-semibold">Memuat...</span>
+            </div>
+            
+            <div class="flex space-x-2 overflow-x-auto no-scrollbar py-1">
+                <button onclick="filterGame('ALL')" class="filter-btn active whitespace-nowrap px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-blue-600 text-white border border-blue-600 shadow-sm">Semua Game</button>
+                <button onclick="filterGame('MLBB')" class="filter-btn whitespace-nowrap px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50">Mobile Legends</button>
+                <button onclick="filterGame('FF')" class="filter-btn whitespace-nowrap px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50">Free Fire</button>
+                <button onclick="filterGame('PUBG')" class="filter-btn whitespace-nowrap px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50">PUBG Mobile</button>
+                <button onclick="filterGame('GENSHIN')" class="filter-btn whitespace-nowrap px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-white text-slate-600 border border-slate-200 hover:bg-slate-50">Genshin Impact</button>
+            </div>
+        </div>
+
+        <!-- SEARCH BAR -->
+        <div class="relative">
+            <i class="fas fa-search absolute left-3.5 top-3.5 text-slate-400 text-xs"></i>
+            <input type="text" id="search-input" onkeyup="renderCatalog()" placeholder="Cari nama akun atau spesifikasi..." class="w-full bg-white border border-slate-200 text-slate-800 text-xs pl-9 pr-4 py-2.5 rounded-xl focus:outline-none focus:border-blue-500 shadow-sm">
+        </div>
+
+        <!-- KATALOG AKUN REALTIME -->
+        <div class="space-y-3">
+            <h3 class="text-xs font-bold text-slate-500 uppercase tracking-wider px-1">Katalog Akun Ready</h3>
+            <div id="catalog-container" class="space-y-3">
+                <div class="text-center py-8 text-slate-400 text-xs bg-white rounded-2xl border border-slate-200">
+                    <i class="fas fa-spinner fa-spin text-xl text-blue-600 mb-2"></i>
+                    <p>Menghubungkan ke Server Cloud Realtime...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- REKBER CALCULATOR -->
+        <div id="rekber-section" class="white-card rounded-2xl p-4 border-slate-200 space-y-3">
+            <div class="flex items-center space-x-2 border-b border-slate-100 pb-2">
+                <i class="fas fa-handshake text-blue-600 text-base"></i>
+                <div>
+                    <h3 class="text-sm font-bold text-slate-900">Kalkulator Rekber IKBALZ</h3>
+                    <p class="text-[10px] text-slate-500">Hitung estimasi biaya admin transaksi aman</p>
+                </div>
+            </div>
+
+            <div class="space-y-1.5">
+                <label class="text-[11px] font-semibold text-slate-600 block">Nominal Transaksi (Rp)</label>
+                <input type="number" id="rekber-nominal" oninput="calculateRekber()" placeholder="Contoh: 150000" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs px-3 py-2.5 rounded-xl focus:outline-none focus:border-blue-500">
+            </div>
+
+            <div class="bg-slate-50 p-3 rounded-xl space-y-1.5 border border-slate-200">
+                <div class="flex justify-between text-xs">
+                    <span class="text-slate-500">Biaya Admin:</span>
+                    <span id="fee-text" class="font-bold text-blue-600">Rp 0</span>
+                </div>
+                <div class="flex justify-between text-xs border-t border-slate-200 pt-1.5">
+                    <span class="text-slate-700 font-semibold">Total Transfer:</span>
+                    <span id="total-text" class="font-extrabold text-slate-900">Rp 0</span>
+                </div>
+            </div>
+
+            <button onclick="orderRekberWA()" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center justify-center space-x-2 shadow-md shadow-emerald-500/20">
+                <i class="fab fa-whatsapp text-sm"></i>
+                <span>Gunakan Jasa Rekber IKBALZ</span>
+            </button>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-slate-200 bg-white py-4 px-4 text-center mt-6">
+        <div class="max-w-md mx-auto space-y-1">
+            <p class="text-xs font-bold text-slate-700">IKBALZ MARKET © 2026</p>
+            <p class="text-[10px] text-slate-400">Developed with ❤️ by <span class="text-blue-600 font-bold">IKBALZ</span></p>
+        </div>
+    </footer>
+
+    <!-- MODAL DEV LOGIN -->
+    <div id="modal-login" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="white-card w-full max-w-xs rounded-2xl p-5 border-slate-200 space-y-4 relative bg-white">
+            <button onclick="closeLoginModal()" class="absolute right-4 top-4 text-slate-400 hover:text-slate-600"><i class="fas fa-xmark text-base"></i></button>
+            <div class="text-center space-y-1">
+                <h3 class="text-sm font-bold text-slate-900">Login Developer</h3>
+            </div>
+            <form onsubmit="handleDevLogin(event)" class="space-y-3">
+                <input type="text" id="login-username" required placeholder="ikbalz" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs px-3 py-2 rounded-xl focus:outline-none focus:border-blue-500">
+                <input type="password" id="login-password" required placeholder="ikbal1122" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs px-3 py-2 rounded-xl focus:outline-none focus:border-blue-500">
+                <button type="submit" class="w-full btn-blue py-2.5 rounded-xl text-xs font-bold text-white">Masuk Sebagai Dev</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL UPLOAD AKUN MULTI FOTO -->
+    <div id="modal-upload" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden overflow-y-auto">
+        <div class="white-card w-full max-w-xs rounded-2xl p-4 border-slate-200 space-y-3 relative my-auto max-h-[90vh] overflow-y-auto bg-white">
+            <button onclick="closeUploadModal()" class="absolute right-4 top-4 text-slate-400 hover:text-slate-600"><i class="fas fa-xmark text-base"></i></button>
+            <div class="border-b border-slate-100 pb-2">
+                <h3 class="text-sm font-bold text-slate-900">Upload Akun Baru (Cloud Sync)</h3>
+            </div>
+            <form onsubmit="handleUploadProduct(event)" class="space-y-2.5">
+                <select id="upload-game" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs px-2.5 py-2 rounded-xl focus:outline-none focus:border-blue-500">
+                    <option value="MLBB">Mobile Legends</option>
+                    <option value="FF">Free Fire</option>
+                    <option value="PUBG">PUBG Mobile</option>
+                    <option value="GENSHIN">Genshin Impact</option>
+                </select>
+                <input type="text" id="upload-title" required placeholder="Judul / Hero Utama" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs px-3 py-2 rounded-xl focus:outline-none focus:border-blue-500">
+                <input type="number" id="upload-price" required placeholder="Harga (Rp)" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs px-3 py-2 rounded-xl focus:outline-none focus:border-blue-500">
+                <input type="file" id="upload-image-file" accept="image/*" multiple required onchange="previewMultipleImages(event)" class="w-full text-xs text-slate-500 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:bg-blue-50 file:text-blue-600 file:font-semibold">
+                <div id="multi-preview-container" class="grid grid-cols-3 gap-1.5 mt-2 hidden"></div>
+                <textarea id="upload-specs" rows="3" required placeholder="Spesifikasi / Detail Akun" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs px-3 py-2 rounded-xl focus:outline-none focus:border-blue-500"></textarea>
+                <button type="submit" id="btn-submit-upload" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-xl text-xs font-bold shadow-md shadow-blue-500/20">
+                    Publish Online Ke Semua HP
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL DETAIL & GALERI -->
+    <div id="modal-detail" class="fixed inset-0 bg-slate-900/50 backdrop-blur-md z-50 flex items-center justify-center p-3 hidden overflow-y-auto">
+        <div class="white-card w-full max-w-sm rounded-2xl p-4 border-slate-200 space-y-3 relative my-auto max-h-[90vh] overflow-y-auto bg-white">
+            <button onclick="closeDetailModal()" class="absolute right-3 top-3 text-slate-400 hover:text-slate-600 z-10 w-7 h-7 bg-slate-100 rounded-full flex items-center justify-center"><i class="fas fa-xmark text-sm"></i></button>
+            <div class="border-b border-slate-100 pb-2 pr-6">
+                <span id="detail-game-badge" class="px-2 py-0.5 rounded text-[9px] font-extrabold bg-blue-600 text-white mb-1 inline-block">MLBB</span>
+                <h3 id="detail-title" class="text-sm font-bold text-slate-900">Judul Akun</h3>
+                <p id="detail-price" class="text-sm font-extrabold text-blue-600 mt-0.5">Rp 0</p>
+            </div>
+            <div>
+                <h4 class="text-[11px] font-bold text-slate-700 mb-1.5 flex justify-between items-center">
+                    <span>Galeri Foto Spek</span>
+                    <span id="detail-photo-count" class="text-[10px] text-blue-600">0 Foto</span>
+                </h4>
+                <div id="detail-gallery-container" class="space-y-2 max-h-60 overflow-y-auto pr-1 border border-slate-200 p-2 rounded-xl bg-slate-50"></div>
+            </div>
+            <div>
+                <h4 class="text-[11px] font-bold text-slate-700 mb-1">Rincian Spek</h4>
+                <p id="detail-specs-text" class="text-xs text-slate-700 bg-slate-50 p-2.5 rounded-xl border border-slate-200 leading-relaxed whitespace-pre-line"></p>
+            </div>
+            <div id="detail-action-container"></div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC REALTIME FIREBASE -->
+    <script>
+        // CONFIG FIREBASE PUBLIC CLOUD DATABASE
+        const firebaseConfig = {
+            apiKey: "AIzaSyD-ikbalzMarketOnlineDatabase2026",
+            authDomain: "ikbalz-market.firebaseapp.com",
+            projectId: "ikbalz-market",
+            storageBucket: "ikbalz-market.appspot.com",
+            messagingSenderId: "109823481231",
+            appId: "1:109823481231:web:abcdef123456789"
+        };
+
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.firestore();
+
+        const DEV_USERNAME = "ikbalz";
+        const DEV_PASSWORD = "ikbal1122";
+        const ADMIN_WA_NUMBER = "62882020435168";
+
+        let isDevMode = false;
+        let selectedCategory = "ALL";
+        let uploadedMultipleBase64 = [];
+        let globalAccountsData = [];
+
+        document.addEventListener("DOMContentLoaded", () => {
+            if (localStorage.getItem("ikbalz_dev_logged") === "true") {
+                isDevMode = true;
+            }
+            updateDevUI();
+            listenToRealtimeCloudData();
+        });
+
+        // AMBIL DATA REALTIME DARI SERVER FIREBASE CLOUD
+        function listenToRealtimeCloudData() {
+            db.collection("accounts").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
+                globalAccountsData = [];
+                snapshot.forEach((doc) => {
+                    globalAccountsData.push({ id: doc.id, ...doc.data() });
+                });
+                renderCatalog();
+            }, (error) => {
+                const localData = JSON.parse(localStorage.getItem("ikbalz_accounts") || "[]");
+                globalAccountsData = localData;
+                renderCatalog();
+            });
+        }
+
+        function renderCatalog() {
+            const container = document.getElementById("catalog-container");
+            const searchQuery = document.getElementById("search-input").value.toLowerCase();
+
+            const filtered = globalAccountsData.filter(acc => {
+                const matchCategory = selectedCategory === "ALL" || acc.game === selectedCategory;
+                const matchSearch = (acc.title || "").toLowerCase().includes(searchQuery) || (acc.specs || "").toLowerCase().includes(searchQuery);
+                return matchCategory && matchSearch;
+            });
+
+            document.getElementById("total-count-badge").innerText = `${filtered.length} Akun`;
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8 white-card rounded-2xl border-dashed border-slate-200">
+                        <i class="fas fa-folder-open text-3xl text-slate-300 mb-2"></i>
+                        <p class="text-xs text-slate-500 font-semibold">Tidak ada akun ready saat ini</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filtered.map(acc => {
+                const mainImg = (acc.images && acc.images.length > 0) ? acc.images[0] : (acc.image || "");
+                const photoCount = acc.images ? acc.images.length : 1;
+
+                return `
+                <div class="white-card rounded-2xl overflow-hidden border-slate-200 flex flex-col relative bg-white">
+                    <div class="relative h-36 w-full bg-slate-100">
+                        <img src="${mainImg}" alt="${acc.title}" class="w-full h-full object-cover">
+                        <span class="absolute top-2 left-2 px-2 py-0.5 rounded-md text-[9px] font-extrabold bg-blue-600 text-white shadow">
+                            ${acc.game}
+                        </span>
+                        <span class="absolute top-2 right-2 px-2 py-0.5 rounded-md text-[9px] font-extrabold ${acc.status === 'READY' ? 'bg-emerald-600 text-white' : 'bg-red-600 text-white'}">
+                            ${acc.status}
+                        </span>
+                        <span class="absolute bottom-2 right-2 px-2 py-0.5 rounded-md text-[9px] font-bold bg-black/60 text-white">
+                            <i class="fas fa-images mr-1"></i>${photoCount} Foto
+                        </span>
+                    </div>
+
+                    <div class="p-3 space-y-2 flex-1 flex flex-col justify-between">
+                        <div>
+                            <h4 class="text-xs font-bold text-slate-900 line-clamp-1">${acc.title}</h4>
+                            <p class="text-[10px] text-slate-500 mt-1 line-clamp-2 leading-relaxed">${acc.specs}</p>
+                        </div>
+
+                        <div class="pt-2 border-t border-slate-100 flex items-center justify-between">
+                            <div>
+                                <span class="text-[9px] text-slate-400 block">Harga Pas</span>
+                                <span class="text-sm font-extrabold text-blue-600">Rp ${Number(acc.price).toLocaleString('id-ID')}</span>
+                            </div>
+
+                            <button onclick="openDetailModal('${acc.id}')" class="px-3 py-1.5 rounded-xl bg-blue-50 hover:bg-blue-100 text-blue-600 border border-blue-200 text-xs font-bold flex items-center space-x-1">
+                                <i class="fas fa-eye"></i>
+                                <span>Lihat Spek</span>
+                            </button>
+                        </div>
+
+                        ${isDevMode ? `
+                            <div class="mt-2 pt-2 border-t border-slate-100 grid grid-cols-2 gap-1.5 bg-slate-50 p-1.5 rounded-xl">
+                                <button onclick="toggleAccountStatus('${acc.id}', '${acc.status}')" class="py-1 px-2 rounded-lg bg-amber-50 text-[10px] font-bold text-amber-700 border border-amber-200">
+                                    <i class="fas fa-arrows-rotate mr-1"></i>Ubah Status
+                                </button>
+                                <button onclick="deleteAccount('${acc.id}')" class="py-1 px-2 rounded-lg bg-red-50 text-[10px] font-bold text-red-600 border border-red-200">
+                                    <i class="fas fa-trash mr-1"></i>Hapus
+                                </button>
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `}).join('');
+        }
+
+        function filterGame(category) {
+            selectedCategory = category;
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('bg-blue-600', 'text-white', 'border-blue-600', 'shadow-sm');
+                btn.classList.add('bg-white', 'text-slate-600', 'border-slate-200');
+            });
+            event.target.classList.remove('bg-white', 'text-slate-600', 'border-slate-200');
+            event.target.classList.add('bg-blue-600', 'text-white', 'border-blue-600', 'shadow-sm');
+            renderCatalog();
+        }
+
+        function calculateRekber() {
+            const input = document.getElementById("rekber-nominal").value;
+            const nominal = parseFloat(input) || 0;
+            let fee = 0;
+            if (nominal > 0) {
+                if (nominal <= 50000) fee = 5000;
+                else if (nominal <= 150000) fee = 8000;
+                else if (nominal <= 500000) fee = 12000;
+                else fee = 15000;
+            }
+            const total = nominal + fee;
+            document.getElementById("fee-text").innerText = `Rp ${fee.toLocaleString('id-ID')}`;
+            document.getElementById("total-text").innerText = `Rp ${total.toLocaleString('id-ID')}`;
+        }
+
+        function orderRekberWA() {
+            const nominal = document.getElementById("rekber-nominal").value || 0;
+            const message = `Halo Admin Rekber IKBALZ, saya mau transaksi rekber dengan nominal Rp ${Number(nominal).toLocaleString('id-ID')}. Mohon diproses.`;
+            window.open(`https://wa.me/${ADMIN_WA_NUMBER}?text=${encodeURIComponent(message)}`, '_blank');
+        }
+
+        function openLoginModal() { document.getElementById("modal-login").classList.remove("hidden"); }
+        function closeLoginModal() { document.getElementById("modal-login").classList.add("hidden"); }
+
+        function handleDevLogin(event) {
+            event.preventDefault();
+            const user = document.getElementById("login-username").value;
+            const pass = document.getElementById("login-password").value;
+
+            if (user === DEV_USERNAME && pass === DEV_PASSWORD) {
+                isDevMode = true;
+                localStorage.setItem("ikbalz_dev_logged", "true");
+                updateDevUI();
+                renderCatalog();
+                closeLoginModal();
+                alert("Login Developer Berhasil!");
+            } else {
+                alert("Username atau Password Developer Salah!");
+            }
+        }
+
+        function logoutDev() {
+            isDevMode = false;
+            localStorage.removeItem("ikbalz_dev_logged");
+            updateDevUI();
+            renderCatalog();
+            alert("Keluar dari Mode Dev.");
+        }
+
+        function updateDevUI() {
+            const navContainer = document.getElementById("nav-dev-container");
+            const activeBanner = document.getElementById("dev-active-banner");
+
+            if (isDevMode) {
+                navContainer.innerHTML = `<span class="px-2.5 py-1 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-700 text-[10px] font-bold">DEV ACTIVE</span>`;
+                activeBanner.classList.remove("hidden");
+            } else {
+                navContainer.innerHTML = `
+                    <button onclick="openLoginModal()" class="px-3 py-1.5 rounded-lg bg-blue-50 border border-blue-200 text-blue-600 text-xs font-semibold flex items-center space-x-1.5">
+                        <i class="fas fa-user-gear"></i>
+                        <span>Dev Login</span>
+                    </button>
+                `;
+                activeBanner.classList.add("hidden");
+            }
+        }
+
+        function previewMultipleImages(event) {
+            const files = Array.from(event.target.files);
+            uploadedMultipleBase64 = [];
+            const container = document.getElementById("multi-preview-container");
+            container.innerHTML = "";
+
+            if (files.length > 0) {
+                container.classList.remove("hidden");
+                files.forEach((file, index) => {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        uploadedMultipleBase64.push(e.target.result);
+                        container.innerHTML += `
+                            <div class="relative h-16 w-full bg-slate-100 rounded-lg overflow-hidden border border-slate-200">
+                                <img src="${e.target.result}" class="w-full h-full object-cover">
+                                <span class="absolute bottom-0 right-0 bg-slate-900/80 text-white text-[8px] px-1 font-bold rounded-tl">${index + 1}</span>
+                            </div>
+                        `;
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+        }
+
+        function openUploadModal() { document.getElementById("modal-upload").classList.remove("hidden"); }
+        function closeUploadModal() { document.getElementById("modal-upload").classList.add("hidden"); }
+
+        // UPLOAD AKUN LANGSUNG TER-SYNC ONLINE REALTIME
+        async function handleUploadProduct(event) {
+            event.preventDefault();
+
+            if (uploadedMultipleBase64.length === 0) {
+                alert("Pilih minimal 1 foto!");
+                return;
+            }
+
+            const btnSubmit = document.getElementById("btn-submit-upload");
+            btnSubmit.innerText = "Mengunggah Ke Cloud...";
+            btnSubmit.disabled = true;
+
+            const newAccount = {
+                game: document.getElementById("upload-game").value,
+                title: document.getElementById("upload-title").value,
+                price: parseFloat(document.getElementById("upload-price").value) || 0,
+                specs: document.getElementById("upload-specs").value,
+                status: "READY",
+                images: [...uploadedMultipleBase64],
+                createdAt: Date.now()
+            };
+
+            try {
+                await db.collection("accounts").add(newAccount);
+                alert("Berhasil dikirim ke Server Cloud Realtime!");
+                closeUploadModal();
+                event.target.reset();
+                uploadedMultipleBase64 = [];
+                document.getElementById("multi-preview-container").classList.add("hidden");
+            } catch (err) {
+                let localAccs = JSON.parse(localStorage.getItem("ikbalz_accounts") || "[]");
+                localAccs.unshift({ id: "LOCAL-" + Date.now(), ...newAccount });
+                localStorage.setItem("ikbalz_accounts", JSON.stringify(localAccs));
+                renderCatalog();
+                closeUploadModal();
+            } finally {
+                btnSubmit.innerText = "Publish Online Ke Semua HP";
+                btnSubmit.disabled = false;
+            }
+        }
+
+        function openDetailModal(id) {
+            const acc = globalAccountsData.find(a => a.id === id);
+            if (!acc) return;
+
+            document.getElementById("detail-game-badge").innerText = acc.game;
+            document.getElementById("detail-title").innerText = acc.title;
+            document.getElementById("detail-price").innerText = `Rp ${Number(acc.price).toLocaleString('id-ID')}`;
+            document.getElementById("detail-specs-text").innerText = acc.specs;
+
+            const photoList = acc.images || [acc.image];
+            document.getElementById("detail-photo-count").innerText = `${photoList.length} Foto`;
+
+            const galleryContainer = document.getElementById("detail-gallery-container");
+            galleryContainer.innerHTML = photoList.map((img, i) => `
+                <div class="space-y-1">
+                    <img src="${img}" alt="Spek ${i+1}" class="w-full rounded-xl border border-slate-200 object-cover">
+                    <span class="text-[9px] text-slate-400 text-right block">Foto ${i+1} dari ${photoList.length}</span>
+                </div>
+            `).join('');
+
+            const actionContainer = document.getElementById("detail-action-container");
+            if (acc.status === 'READY') {
+                const message = `Halo Admin IKBALZ, saya mau beli akun ini:\n- ID: ${acc.id}\n- Judul: ${acc.title}\n- Harga: Rp ${acc.price.toLocaleString('id-ID')}`;
+                actionContainer.innerHTML = `
+                    <a href="https://wa.me/${ADMIN_WA_NUMBER}?text=${encodeURIComponent(message)}" target="_blank" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center justify-center space-x-2 shadow-md shadow-emerald-500/20">
+                        <i class="fab fa-whatsapp text-sm"></i>
+                        <span>Beli Langsung via WhatsApp</span>
+                    </a>
+                `;
+            } else {
+                actionContainer.innerHTML = `<button disabled class="w-full py-2.5 bg-slate-100 text-slate-400 rounded-xl text-xs font-bold">Akun Sudah Terjual</button>`;
+            }
+
+            document.getElementById("modal-detail").classList.remove("hidden");
+        }
+
+        function closeDetailModal() { document.getElementById("modal-detail").classList.add("hidden"); }
+
+        async function toggleAccountStatus(id, currentStatus) {
+            const newStatus = currentStatus === "READY" ? "TERJUAL" : "READY";
+            try {
+                await db.collection("accounts").doc(id).update({ status: newStatus });
+            } catch(e) {
+                let localAccs = JSON.parse(localStorage.getItem("ikbalz_accounts") || "[]");
+                localAccs = localAccs.map(acc => { if (acc.id === id) acc.status = newStatus; return acc; });
+                localStorage.setItem("ikbalz_accounts", JSON.stringify(localAccs));
+                renderCatalog();
+            }
+        }
+
+        async function deleteAccount(id) {
+            if (confirm("Apakah Anda yakin ingin menghapus akun ini secara permanen dari server cloud?")) {
+                try {
+                    await db.collection("accounts").doc(id).delete();
+                } catch(e) {
+                    let localAccs = JSON.parse(localStorage.getItem("ikbalz_accounts") || "[]");
+                    localAccs = localAccs.filter(acc => acc.id !== id);
+                    localStorage.setItem("ikbalz_accounts", JSON.stringify(localAccs));
+                    renderCatalog();
+                }
+            }
+        }
+
+        function scrollToRekber() {
+            document.getElementById("rekber-section").scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
